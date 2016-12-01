@@ -32,6 +32,12 @@ router.get('/username/:username/game/:game', function(req, res, next) {
   .then(data => res.send(data))
 })
 
+router.get('/similar/:gamename', function (req, res, next) {
+  psn.getGameIdFromGiantBomb(req.params.gamename)
+  .then(psn.getSimilar)
+  .then(data => res.send(data))
+})
+
 router.get('/:username/:game', function(req, res, next) {
   getUserGameFriends(req.params.username, req.params.game)
   .then(getAllUsers)
