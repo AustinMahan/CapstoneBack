@@ -4,7 +4,7 @@ const router = express.Router();
 const knex = require('../db/knex');
 
 const psn = require("../controllers/psn")
-const {checkForUser, getUserAndGame, checkGames, getUser, getUserGameFriends, getAllUsers} = require("../queries/index")
+const {checkForUser, getUserAndGame, checkGames, getUser, getUserGameFriends, getAllUsers, updateAllTimes} = require("../queries/index")
 
 router.post('/', function(req, res, next) {
   psn.signIn(req.body.username, req.body.password)
@@ -12,6 +12,11 @@ router.post('/', function(req, res, next) {
   .then(checkGames)
   .then(data => res.send(data))
   .catch(err => res.send({error: err}))
+})
+
+router.post('/all/:username', function (req, res, next) {
+  updateAllTimes(req.params.username, req.body.times)
+  .then(data => res.send(data))
 })
 
 router.post('/:username', function(req, res, next) {
@@ -23,7 +28,7 @@ router.post('/:username', function(req, res, next) {
 })
 
 router.post('/friendReq/:username', function (req, res, next) {
-  psn.sendFriendReq(req.params.username, req.body.email, req.body.password)
+  psn.sendFriendReq(req.params.username, req.body.email, req.body.message)
   .then(data => res.send(data))
 })
 
@@ -43,6 +48,5 @@ router.get('/:username/:game', function(req, res, next) {
   .then(getAllUsers)
   .then(data => res.send(data))
 })
-
 
 module.exports = router;

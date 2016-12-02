@@ -137,6 +137,14 @@ function getAllUsers(data) {
   return Promise.all(promise).then(() => data)
 }
 
+function updateAllTimes(username, time) {
+  return getUser(username).then(data => {
+    var user_id = data[0].id
+    return knex("games").update("time-plays", time).where("user_id", user_id)
+    .then(() => "ok")
+  })
+}
+
 module.exports = {
-  checkForUser, getUserAndGame, checkGames, getUser, getUserGameFriends, getAllUsers
+  checkForUser, getUserAndGame, checkGames, getUser, getUserGameFriends, getAllUsers, updateAllTimes
 }

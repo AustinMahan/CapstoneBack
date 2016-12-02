@@ -1,28 +1,32 @@
 var PSNjs = require('PSNjs');
 var requestify = require('requestify');
 
+var psns = {}
+
 function signIn(username, password) {
-  var psn = new PSNjs({
-    email: username,
-    password: password
-  });
+  if(!psns[username]) {
+    var psn = new PSNjs({
+      email: username,
+      password: password,
+      debug: true
+    });
+    psns[username] = psn
+  }
+  var psn = psns[username]
   var promise = new Promise(function(resolve, reject) {
     psn.getUserTrophies(function(error, data) {
-     if (error) {
-       console.log(error);
+    if (error) {
+      console.log(error);
       return reject(error);
-     }
+    }
       return resolve(data);
     });
   });
   return promise
 }
 
-function sendFriendReq(toUsername, fromUserEmail, password, message='Friend request form Austin\'s awesome app') {
-  var psn = new PSNjs({
-    email: fromUserEmail,
-    password: password
-  });
+function sendFriendReq(toUsername, fromUserEmail, message='Friend request from Austin\'s awesome app') {
+  var psn = psns[fromUserEmail]
   var promise = new Promise(function(resolve, reject) {
     psn.sendFriendRequest(toUsername, message, function(error, data) {
      if (error) {
