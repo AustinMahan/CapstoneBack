@@ -7,7 +7,8 @@ function signIn(username, password) {
   if(!psns[username]) {
     var psn = new PSNjs({
       email: username,
-      password: password
+      password: password,
+      authfile: ".psnAuth"
     });
     psns[username] = psn
   }
