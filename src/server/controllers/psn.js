@@ -18,7 +18,6 @@ function signIn(username, password) {
 
         // load successful!
     });
-
     // save example
     psn.OnSave(function(data, callback) {
         // save data
