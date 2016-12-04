@@ -4,14 +4,35 @@ var requestify = require('requestify');
 var psns = {}
 
 function signIn(username, password) {
-  // if(!psns[username]) {
+  if(!psns[username]) {
     var psn = new PSNjs({
       email: username,
-      password: password,
-      authfile: ".psnAuth"
+      password: password
     });
-    // psns[username] = psn
-  // }
+    psn.Load("SAVED DATA", function(error) {
+        if (error)
+        {
+            console.log("Error loading data: " + error);
+            return;
+        }
+
+        // load successful!
+    });
+
+    // save example
+    psn.OnSave(function(data, callback) {
+        // save data
+        // data will be a Base64 string
+        mySaveSystem.save(data, function() {
+            // all done!
+            // always call the callback so the API knows you're done saving!
+            //  handle your own error reporting and debugging
+            callback();
+        });
+    });
+
+    psns[username] = psn
+  }
   // var psn = psns[username]
   var promise = new Promise(function(resolve, reject) {
     psn.getUserTrophies((error, data) => error ? reject(error) : resolve(data));
