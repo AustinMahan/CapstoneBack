@@ -7,7 +7,6 @@ const psn = require("../controllers/psn")
 const {checkForUser, getUserAndGame, checkGames, getUser, getUserGameFriends, getAllUsers, updateAllTimes} = require("../queries/index")
 
 router.post('/', function(req, res, next) {
-  console.log(req.body)
   psn.signIn(req.body.username, req.body.password)
   .then(checkForUser)
   .then(checkGames)
