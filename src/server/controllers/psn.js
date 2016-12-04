@@ -22,17 +22,12 @@ function signIn(username, password) {
     psn.OnSave(function(data, callback) {
         // save data
         // data will be a Base64 string
-        mySaveSystem.save(data, function() {
-            // all done!
-            // always call the callback so the API knows you're done saving!
-            //  handle your own error reporting and debugging
-            callback();
-        });
+        callback()
     });
 
     psns[username] = psn
   }
-  // var psn = psns[username]
+  var psn = psns[username]
   var promise = new Promise(function(resolve, reject) {
     psn.getUserTrophies((error, data) => error ? reject(error) : resolve(data));
   });
@@ -40,7 +35,7 @@ function signIn(username, password) {
 }
 
 function sendFriendReq(toUsername, fromUserEmail, message='Friend request from Austin\'s awesome app') {
-  // var psn = psns[fromUserEmail]
+  var psn = psns[fromUserEmail]
   // var psn = new PSNjs({
   //   email: username,
   //   password: password,
