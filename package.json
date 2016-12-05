@@ -8,7 +8,9 @@
   },
   "dependencies": {
     "PSNjs": "^0.1.2",
+    "bcrypt": "^1.0.0",
     "body-parser": "~1.15.1",
+    "cheerio": "^0.22.0",
     "connect-flash": "^0.1.1",
     "cookie-parser": "~1.4.3",
     "cors": "^2.8.1",

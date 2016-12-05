@@ -1,9 +1,10 @@
 const knex = require('../db/knex');
+const bcrypt = require('bcrypt');
 
 function checkForUser(data) {
   if (data.trophyTitles) {
     findOrAddUser(data.trophyTitles[0].fromUser.onlineId, data.trophyTitles)
-    return data.trophyTitles.filter(game => game.fromUser.progress)
+    return data.trophyTitles.filter(game => game.progress && game.platforms.indexOf('ps4') > -1)
   }
   return {"error":data}
 }
@@ -145,6 +146,18 @@ function updateAllTimes(username, time) {
   })
 }
 
+function addUser(username, password) {
+  var pass = bcrypt.hashSync(password, 8)
+  return knex('users').insert({username: username, password: pass}).then(idk => idk)
+}
+
+function login(username, password) {
+  var pass = bcrypt.hashSync(password, 8)
+  return knex('users').where("username", username).then(data => {
+    return data.length > 0 && bcrypt.compareSync(password, data[0].password) ? username : Promise.reject(data)
+  })
+}
+
 module.exports = {
-  checkForUser, getUserAndGame, checkGames, getUser, getUserGameFriends, getAllUsers, updateAllTimes
+  checkForUser, getUserAndGame, checkGames, getUser, getUserGameFriends, getAllUsers, updateAllTimes, addUser, login
 }

@@ -1,41 +1,16 @@
-var PSNjs = require('PSNjs');
+var PSNjs = require('./testpsn.js');
 var requestify = require('requestify');
 
-var psns = {}
-
 function signIn(username, password) {
-  if(!psns[username]) {
-    var psn = new PSNjs({
-      email: username,
-      password: password
-    });
-    psn.Load("SAVED DATA", function(error) {
-        if (error)
-        {
-            console.log("Error loading data: " + error);
-            return;
-        }
-
-        // load successful!
-    });
-    // save example
-    psn.OnSave(function(data, callback) {
-        // save data
-        // data will be a Base64 string
-        callback()
-    });
-
-    psns[username] = psn
-  }
-  var psn = psns[username]
+  var psn3 = new PSNjs()
   var promise = new Promise(function(resolve, reject) {
-    psn.getUserTrophies((error, data) => error ? reject(error) : resolve(data));
+    psn3.request(username, (err, games) => err ? reject(error) : resolve(games));
   });
   return promise
 }
 
 function sendFriendReq(toUsername, fromUserEmail, message='Friend request from Austin\'s awesome app') {
-  var psn = psns[fromUserEmail]
+  // var psn = psns[fromUserEmail]
   // var psn = new PSNjs({
   //   email: username,
   //   password: password,
@@ -59,6 +34,26 @@ function getSimilar(game) {
   });
 }
 
+function formatData(data, username) {
+  var output = {}
+  output.trophyTitles = data.map(el => {
+    var out = {
+      trophyTitleName: el.title,
+      trophyTitleIconUrl: el.avatar,
+      progress: el.progress,
+      platforms: el.platforms
+    }
+    out.fromUser = {}
+    out.fromUser.onlineId = username
+    out.fromUser.progress = el.progress
+    return out
+  })
+  return output
+}
+
+// var psn3 = new PSNjs()
+// psn3.request("ViperDriver-21", (err, games) => console.log(formatData(games).trophyTitles));
+
 module.exports = {
-  signIn, sendFriendReq, getGameIdFromGiantBomb, getSimilar
+  signIn, sendFriendReq, getGameIdFromGiantBomb, getSimilar, formatData
 };
