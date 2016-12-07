@@ -17,7 +17,7 @@ router.post('/', function(req, res, next) {
 })
 
 router.post('/signup', function (req, res, next) {
-  addUser(req.body.username, req.body.password)
+  addUser(req.body.username, req.body.password, req.body.email)
   .then(() => res.send('ok'))
   .catch(() => res.send('bad'))
 })

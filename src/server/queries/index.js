@@ -80,8 +80,6 @@ function addNewGameToUser(username, dbGames, trophyGames) {
     })
     return Promise.all(promise)
   })
-
-  // knex("games").insert()
 }
 
 function findDifference(dbGames, trophyGames) {
@@ -146,9 +144,9 @@ function updateAllTimes(username, time) {
   })
 }
 
-function addUser(username, password) {
+function addUser(username, password, email) {
   var pass = bcrypt.hashSync(password, 8)
-  return knex('users').insert({username: username, password: pass}).then(idk => idk)
+  return knex('users').insert({username: username, password: pass, email: email}).then(idk => idk)
 }
 
 function login(username, password) {
